@@ -16,13 +16,15 @@ Installation
 
 3. Add your configuration variables:
 
-        # config/application.yml
-        username: 'seth'
-        password: 'aj29slda'
-        development:
-          pusher_url: 'http://github.com/pusher'
-        production:
-          pusher_url: 'http://google.com/pusher'
+    ```yaml
+    # config/application.yml
+    username: 'seth'
+    password: 'aj29slda'
+    development:
+      pusher_url: 'http://github.com/pusher'
+    production:
+      pusher_url: 'http://google.com/pusher'
+    ```
 
 Usage
 -----
@@ -34,7 +36,9 @@ gem 'magiconf'
 gem 'rails'
 ```
 
-```text
+&nbsp;
+
+```yaml
 # config/application.yml
 username: 'seth'
 development:
@@ -42,6 +46,8 @@ development:
 production:
   password: 'super_secret_test'
 ```
+
+&nbsp;
 
 ```ruby
 # app/controllers/application_controller.rb
