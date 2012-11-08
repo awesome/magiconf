@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Magiconf by sethvargo</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Magiconf</h1>
+        <p>Magiconf is a tiny gem for managing a Rails application configuration file</p>
+
+        <p class="view"><a href="https://github.com/sethvargo/magiconf">View the Project on GitHub <small>sethvargo/magiconf</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/sethvargo/magiconf/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/sethvargo/magiconf/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/sethvargo/magiconf">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Magiconf</h1>
+
+<p>Magiconf is a light-weight alternative to figaro that is designed to work directly with Rails. Easily store and access all your application's configuration data using a single yaml file. A great solution for storing passwords, dealing with heroku, and working in a team with different development environments.</p>
+
+<h2>Installation</h2>
+
+<ol>
+<li>
+<p>Add <code>magiconf</code> to your application's Gemfile:</p>
+
+<pre><code>gem 'magiconf'
+</code></pre>
+
+<p>Don't forget to run the <code>bundle</code> command to install.</p>
+</li>
+<li>
+<p>Next, create <code>config/application.yml</code>:</p>
+
+<pre><code>touch config/application.yml
+</code></pre>
+</li>
+<li>
+<p>Add your configuration variables:</p>
+
+<div class="highlight"><pre><span class="c1"># config/application.yml</span>
+<span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="s">'seth'</span>
+<span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="s">'aj29slda'</span>
+<span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">pusher_url</span><span class="p-Indicator">:</span> <span class="s">'http://github.com/pusher'</span>
+<span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">pusher_url</span><span class="p-Indicator">:</span> <span class="s">'http://google.com/pusher'</span>
+</pre></div>
+</li>
+</ol><h2>Usage</h2>
+
+<p>You now have access to all your configuration data in an easy constant: <code>YourApp::Config</code>. For example, if my Rails app was name <code>Envelope</code>, I could access my configuration with <code>Envelope::Config</code>. Let's look at a simple example:</p>
+
+<div class="highlight"><pre><span class="c1"># Gemfile</span>
+<span class="n">gem</span> <span class="s1">'magiconf'</span>
+<span class="n">gem</span> <span class="s1">'rails'</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="c1"># config/application.yml</span>
+<span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="s">'seth'</span>
+<span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="s">'test'</span>
+<span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="s">'super_secret_test'</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="c1"># app/controllers/application_controller.rb</span>
+<span class="k">def</span> <span class="nf">authenticate</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="no">Envelope</span><span class="o">::</span><span class="no">Config</span><span class="o">.</span><span class="n">username</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="no">Envelope</span><span class="o">::</span><span class="no">Config</span><span class="o">.</span><span class="n">password</span>
+
+  <span class="n">render</span> <span class="ss">:unathorized</span> <span class="k">unless</span> <span class="n">params</span><span class="o">[</span><span class="ss">:username</span><span class="o">]</span> <span class="o">==</span> <span class="n">username</span> <span class="o">&amp;&amp;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:password</span><span class="o">]</span> <span class="o">==</span> <span class="n">password</span>
+<span class="k">end</span>
+</pre></div>
+
+<p><strong>Note: Magiconf will automatically merge the keys associated with your current Rails environment with the top-level ones.</strong></p>
+
+<h2>Nested Keys</h2>
+
+<p>Sometimes, it might make sense to nest your data. For example, a common pusher configuration might look like this:</p>
+
+<div class="highlight"><pre><span class="c1"># config/application.yml</span>
+<span class="l-Scalar-Plain">pusher</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">app_id</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">123</span>
+  <span class="l-Scalar-Plain">key</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">abcdef</span>
+  <span class="l-Scalar-Plain">secret</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">abcdefghijklmnop1234567890</span>
+</pre></div>
+
+<p>The <code>.pusher</code> method would return this data, accessible in a hash:</p>
+
+<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="no">Envelope</span><span class="o">::</span><span class="no">Config</span><span class="o">.</span><span class="n">pusher</span>
+<span class="o">=&gt;</span> <span class="p">{</span><span class="s2">"app_id"</span><span class="o">=&gt;</span><span class="mi">123</span><span class="p">,</span> <span class="s2">"key"</span><span class="o">=&gt;</span><span class="s2">"abcdef"</span><span class="p">,</span> <span class="s2">"secret"</span><span class="o">=&gt;</span><span class="s2">"abcdefghijklmnop1234567890"</span><span class="p">}</span>
+</pre></div>
+
+<p><strong>Notice that the keys are strings, not symbols.</strong> This means you would do something like this in an initializer:</p>
+
+<div class="highlight"><pre><span class="c1"># config/initializers/pusher.rb</span>
+<span class="no">Pusher</span><span class="o">.</span><span class="n">app_id</span> <span class="o">=</span> <span class="no">Envelope</span><span class="o">::</span><span class="no">Config</span><span class="o">.</span><span class="n">pusher</span><span class="o">[</span><span class="s1">'app_id'</span><span class="o">]</span>  <span class="c1"># not :app_id</span>
+<span class="no">Pusher</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="no">Envelope</span><span class="o">::</span><span class="no">Config</span><span class="o">.</span><span class="n">pusher</span><span class="o">[</span><span class="s1">'key'</span><span class="o">]</span>        <span class="c1"># not :key</span>
+<span class="no">Pusher</span><span class="o">.</span><span class="n">secret</span> <span class="o">=</span> <span class="no">Envelope</span><span class="o">::</span><span class="no">Config</span><span class="o">.</span><span class="n">pusher</span><span class="o">[</span><span class="s1">'secret'</span><span class="o">]</span>  <span class="c1"># not :secret</span>
+</pre></div>
+
+<h2>Using in Application Configuration</h2>
+
+<p>Imagine you want to define application configuration variables with Magiconf - maybe you want to define the default host for mail in development. You'd do something like this:</p>
+
+<div class="highlight"><pre><span class="c1"># config/application.yml</span>
+<span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="s">'www.example.com'</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="c1"># config/environments/development.rb</span>
+<span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="n">config</span><span class="o">.</span><span class="n">action_mailer</span><span class="o">.</span><span class="n">default_url_options</span> <span class="o">=</span> <span class="p">{</span> <span class="n">host</span><span class="p">:</span> <span class="no">Envelope</span><span class="o">::</span><span class="no">Config</span><span class="o">.</span><span class="n">host</span> <span class="p">}</span>
+</pre></div>
+
+<p>...And if you try to start up your server, you'll see:</p>
+
+<div class="highlight"><pre>uninitialized constant MyApp::Config (NameError)
+</pre></div>
+
+<p>Huh? Well, it turns out that, even though Magiconf hooks into the Rails initialization process as early as possible, it's not soon enough. There's no way for me to get added anywhere earlier in the stack. Fortunately, there's an easy workaround.</p>
+
+<p>Open up <code>config/application.rb</code> and add the following line to the bottom of the file (around line 72):</p>
+
+<div class="highlight"><pre><span class="c1"># config/application.rb</span>
+<span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="no">Magiconf</span><span class="o">.</span><span class="n">setup!</span>
+</pre></div>
+
+<p>Restart your server and things will work like a charm!</p>
+
+<h2>Contributing</h2>
+
+<ol>
+<li>Fork it</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create new Pull Request</li>
+</ol>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/sethvargo">sethvargo</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
