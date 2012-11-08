@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = 'sethvargo@gmail.com'
   gem.description   = %q{Magiconf is a tiny gem for managing a Rails application configuration file}
   gem.summary       = %q{Manage a single Rails application config file with Magiconf}
-  gem.homepage      = ''
+  gem.homepage      = 'https://github.com/sethvargo/magiconf'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
