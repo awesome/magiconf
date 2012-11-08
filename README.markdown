@@ -36,8 +36,6 @@ gem 'magiconf'
 gem 'rails'
 ```
 
-&nbsp;
-
 ```yaml
 # config/application.yml
 username: 'seth'
@@ -46,8 +44,6 @@ development:
 production:
   password: 'super_secret_test'
 ```
-
-&nbsp;
 
 ```ruby
 # app/controllers/application_controller.rb
