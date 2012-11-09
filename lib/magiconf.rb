@@ -10,6 +10,10 @@ module Magiconf
         return configuration[key]
       end
     end
+
+    nodule.define_singleton_method :method_missing do |m, *args, &block|
+      nil
+    end
   end
 
   # Have we already loaded the magiconf config?
