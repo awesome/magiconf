@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Magiconf is a tiny gem for managing a Rails application configuration file}
   gem.summary       = %q{Manage a single Rails application config file with Magiconf}
   gem.homepage      = 'https://github.com/sethvargo/magiconf'
+  gem.license       = 'Apache 2.0'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

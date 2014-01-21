@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+v1.0.0
+------
+- Update Gemfile
+- **Switch from MIT to Apache2 License**
+
 v0.1.0
 ------
 - Initial Release
