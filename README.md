@@ -118,6 +118,28 @@ Magiconf.setup!
 
 Restart your server and things will work like a charm!
 
+Using with Environment Variables
+----------------------------------
+
+magiconf parses the YAML as ERB, allowing you to set the application configuration using environment variables like:
+
+```
+development:
+  my_secret: <%= ENV['MY_SECRET'] %>
+```
+
+If you are hosting your application on Heroku, you are able to set your environment variables through the CLI and use them in your application with magiconf.
+
+If you want to use environment variables while also having defaults, you can:
+
+```
+development:
+  my_secret: <%= ENV['MY_SECRET'] || 'ABCD1234' %>
+```
+
+This allows you to use a `.env` file and a `Procfile` from [Foreman](https://github.com/ddollar/foreman) to manage your secret keys.
+
+
 Contributing
 ------------
 1. Fork it
